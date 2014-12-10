@@ -1,0 +1,99 @@
+/* Styles go here */
+.dropdown-submenu {
+	position: relative;
+}
+.dropdown-submenu > .dropdown-menu {
+	top: 0;
+	left: 100%;
+	margin-top: -6px;
+	margin-left: -1px;
+	-webkit-border-radius: 0 6px 6px 6px;
+	-moz-border-radius: 0 6px 6px 6px;
+	border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover > .dropdown-menu {
+	display: block;
+}
+.dropdown-submenu > a:after {
+	display: block;
+	content: " ";
+	float: right;
+	width: 0;
+	height: 0;
+	border-color: transparent;
+	border-style: solid;
+	border-width: 5px 0 5px 5px;
+	border-left-color: #cccccc;
+	margin-top: 5px;
+	margin-right: -10px;
+}
+.dropdown-submenu:hover > a:after {
+	border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+	float: none;
+}
+.dropdown-submenu.pull-left > .dropdown-menu {
+	left: -100%;
+	margin-left: 10px;
+	-webkit-border-radius: 6px 0 6px 6px;
+	-moz-border-radius: 6px 0 6px 6px;
+	border-radius: 6px 0 6px 6px;
+}
+
+.navbar {
+	-webkit-border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
+	border-radius: 0 !important;
+}
+
+html {
+	position: relative;
+	min-height: 100%;
+}
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+}
+
+img {
+	width: 100%;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 60px;
+	background-color: #181818;
+  	border-color: #080808;
+  	font-weight: bold;
+  	color: #888888;
+}
+
+#info, #links {
+	display: -webkit-flex;
+	display: flex;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.info-left{
+	width: 80%;
+}
+.info-right{
+	padding-left: 20px;
+	padding-right: 5px;
+	-webkit-flex: 1;
+			flex: 1;
+}
+.smallImg {
+	padding-bottom: 5px;
+	width: 19%;
+	height: 19%;
+}
+
+#links {
+	display: none;
+}

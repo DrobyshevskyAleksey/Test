@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/datepicker.css" rel="stylesheet">
+		<link href="css/datepicker3.css" rel="stylesheet">
+		<link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
+		<link href="css/bootstrap-image-gallery.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="style.css" >
+	</head>
+
+	<body>
+		<nav class="navbar navbar-inverse" role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#"  onclick="changeTopic('All')">Home</a>
+				</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li>
+							<a href="#" onclick="changeTopic('Tech')">Tech</a>
+						</li>
+						<li>
+							<a href="#" onclick="changeTopic('Sport')">Sport</a>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Culture <span class="caret"></span></a>
+							<ul class="dropdown-menu" role="menu">
+								<li>
+									<a href="#" onclick="changeTopic('Society')">Society</a>
+								</li>
+								<li>
+									<a href="#" onclick="changeTopic('Movies')">Movies</a>
+								</li>
+								<li>
+									<a href="#" onclick="changeTopic('Music')">Music</a>
+								</li>
+								<li class="divider"></li>
+								<li>
+									<a href="#" onclick="changeTopic('Business')">Business</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#" onclick="photoGallery()">Photo Gallery</a>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Settings <span class="caret"></span></a>
+							<ul class="dropdown-menu" role="menu">
+								<li class="dropdown-submenu">
+									<a tabindex="-1" href="#">Style</a>
+									<ul class="dropdown-menu">
+										<li>
+											<a tabindex="-1" href="#">Dark</a>
+										</li>
+										<li>
+											<a tabindex="-1" href="#">Light</a>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<div class = "navbar-form navbar-right" role="rearch">
+						<div class="input-daterange input-group" id="datepicker">
+							<input type="text" class="form-control" name="start" id="startDateSearch"/>
+							<span class="input-group-addon">to</span>
+							<input type="text" class="form-control" name="end" id="endDateSearch"/>
+						</div>
+						<button class="btn btn-default" onclick="search('date')">
+							<i class="glyphicon glyphicon-search"></i>
+						</button>
+						<input type="text" id = "titleSearch" class="form-control " placeholder="Search">
+						<button class="btn btn-default" onclick="search('title')">
+							<i class="glyphicon glyphicon-search"></i>
+						</button>
+					</div>
+				</div><!-- /.navbar-collapse -->
+			</div><!-- /.container-fluid -->
+		</nav>
+		<div id ="info">
+			<div class="info-left">
+				<nav class="pages text-center">
+					<ul class="pagination">
+						{{#pages}}
+						<li>
+							<a href="#" onclick="pagination({{page}})">{{page}}</a>
+						</li>
+						{{/pages}}
+					</ul>
+				</nav>
+				<div class="articles">
+					{{#articles}}
+					<h1>{{title}}</h1>
+					<img src={{img}}>
+					<p class="text-justify">
+						{{text}}
+					</p>
+					<small>{{author}} {{stringDate}}</small>
+				{{/articles}}
+				</div>
+				<nav class="pages text-center">
+					<ul class="pagination">
+						{{#pages}}
+						<li>
+							<a href="#" onclick="pagination({{page}})">{{page}}</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+			<div class="info-right">
+				<h3 class="text-center">Most popular</h3>
+				<hr>
+				{{#allArticles}}
+				<div class="media">
+					<a class="media-left media-middle" href="#" onclick="showOne('{{title}}')"> <img src={{img}} > </a>
+					<h5 class="media-heading">{{title}}</h5>
+				</div>
+				{{/allArticles}}
+			</div>
+		</div>
+		<div id="links">
+			{{#articles}}
+			<a href={{img}} data-gallery> <img class="smallImg" src={{img}}> </a>
+			{{/articles}}
+		</div>
+		<div id="blueimp-gallery" class="blueimp-gallery" style="display: none;">
+			<!-- The container for the modal slides -->
+			<div class="slides" style="width: 192000px;"></div>
+			<!-- Controls for the borderless lightbox -->
+			<h3 class="title"></h3>
+			<a class="prev">‹</a>
+			<a class="next">›</a>
+			<a class="close">×</a>
+			<a class="play-pause"></a>
+			<ol class="indicator"></ol>
+			<!-- The modal dialog, which will be used to wrap the lightbox content -->
+			<div class="modal fade">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" aria-hidden="true">
+								×
+							</button>
+							<h4 class="modal-title"></h4>
+						</div>
+						<div class="modal-body next"></div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default pull-left prev">
+								<i class="glyphicon glyphicon-chevron-left"></i>
+								Prev
+							</button>
+							<button type="button" class="btn btn-primary next">
+								Next
+								<i class="glyphicon glyphicon-chevron-right"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<br>
+			<p class="text-center">
+				Aleksey Drobyshevsky, 2014
+			</p>
+		</div>
+		<script src="js/jquery-2.1.1.min.js"></script>
+		<script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
+		<script src="js/bootstrap-image-gallery.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/bootstrap-datepicker.js"></script>
+		<script src="js/objects.js"></script>
+		<script src="script.js"></script>
+	</body>
+
+</html>
