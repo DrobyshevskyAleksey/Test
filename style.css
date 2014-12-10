@@ -77,6 +77,8 @@ img {
 	display: flex;
 	padding-left: 20px;
 	padding-right: 20px;
+	width:1000px;
+	margin: 0 auto;
 }
 
 .info-left{
