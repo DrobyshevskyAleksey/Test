@@ -6,7 +6,35 @@ $('.input-daterange').datepicker({
     autoclose: true,
     keyboardNavigation: false,
 });
-
+var allArticles = [];
+$(function() {
+	$.getJSON("JSON/objects.json", function(data) {
+		for (var index in data.allArticles) {
+			allArticles.push({
+				title : data.allArticles[index].title,
+				img : data.allArticles[index].img,
+				author : data.allArticles[index].author,
+				topic : data.allArticles[index].topic,
+				date : new Date(data.allArticles[index].date),
+				stringDate : data.allArticles[index].stringDate,
+				text : data.allArticles[index].text
+			});
+		}
+		data.articles = [allArticles[0], allArticles[1]];
+		data.allArticles = [allArticles[5], allArticles[7], allArticles[1], allArticles[0], allArticles[3]];
+		var pages = [];
+		for (var i = 1; i < (allArticles.length / 2) + 1; i++) {
+			pages.push({
+				page : i
+			});
+		}
+		data.pages = pages;
+		infoPages.html(Mustache.render(pagesTempl, data));
+		infoLeft.html(Mustache.render(template, data));
+		infoPages.html(Mustache.render(pagesTempl, data));
+		infoRight.html(Mustache.render(popularTemplate, data));
+	});
+}); 
 var info = $("#info");
 var infoLeft = $(".articles");
 var infoPages = $(".pages");
@@ -17,17 +45,16 @@ var pagesTempl = infoPages.html();
 var popularTemplate = infoRight.html();
 var imgTemplate = links.html();
 var topic = 'All';
-var pages = []; 
 var articles = allArticles;
 
 var createPages = function(arr){
-	pages.length = 0;
+	data.pages.length = 0;
 	for(var i = 1; i<(arr.length/2)+1; i++){
-		pages.push({page: i});
+		data.pages.push({page: i});
 	}
 	infoPages.html(Mustache.render(pagesTempl, data));
 	infoPages.show();
-	if(pages.length<2){
+	if(data.pages.length<2){
 		infoPages.hide();
 	}
 };
@@ -130,15 +157,15 @@ var photoGallery = function() {
 };
 
 var data = {
-	allArticles: [allArticles[5], allArticles[7], allArticles[1], allArticles[0], allArticles[3]],
+	allArticles: [],
 	articles: articles,
-	pages: pages
+	pages: []
 };
 
 //init
-data.articles = [allArticles[0], allArticles[1]];
+/*data.articles = [allArticles[0], allArticles[1]];
 createPages(articles);
 infoLeft.html(Mustache.render(template, data));
 infoPages.html(Mustache.render(pagesTempl, data));
-infoRight.html(Mustache.render(popularTemplate, data));
+infoRight.html(Mustache.render(popularTemplate, data));*/
 
