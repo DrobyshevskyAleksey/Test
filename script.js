@@ -1,4 +1,4 @@
-// Code goes here
+// Code goes here...
 $('.dropdown-toggle').dropdown();
 $('.input-daterange').datepicker({
     format: "mm/dd/yyyy",
