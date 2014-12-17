@@ -6,17 +6,22 @@ $('.input-daterange').datepicker({
     autoclose: true,
     keyboardNavigation: false,
 });
+$('#formDate').datepicker({
+	format: "mm/dd/yyyy",
+    todayBtn: "linked",
+    autoclose: true,
+    keyboardNavigation: false,
+});
 var allArticles = [];
 $(function() {
-	$.getJSON("JSON/objects.json", function(data) {
+	$.getJSON("JSON/example.json", function(data) {
 		for (var index in data.allArticles) {
 			allArticles.push({
 				title : data.allArticles[index].title,
 				img : data.allArticles[index].img,
 				author : data.allArticles[index].author,
 				topic : data.allArticles[index].topic,
-				date : new Date(data.allArticles[index].date),
-				stringDate : data.allArticles[index].stringDate,
+				date : data.allArticles[index].date,
 				text : data.allArticles[index].text
 			});
 		}
@@ -40,12 +45,34 @@ var infoLeft = $(".articles");
 var infoPages = $(".pages");
 var infoRight = $(".info-right");
 var links = $("#links");
+var addForm = $(".addForm");
 var template = infoLeft.html();
 var pagesTempl = infoPages.html();
 var popularTemplate = infoRight.html();
 var imgTemplate = links.html();
 var topic = 'All';
 var articles = allArticles;
+
+var addArticle = function(){
+	info.hide();
+	links.hide();
+	addForm.show();
+};
+
+var dateValidation = function(date){
+	regexp = /(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20|21)\d\d/;
+	return regexp.test(date);
+};
+
+var validate = function(){
+	if(dateValidation(document.forms.addArticleForm.formDate.value)){
+		return true;
+	} else {
+		alert("wrong date format");
+		return false;
+	}
+	
+};
 
 var createPages = function(arr){
 	data.pages.length = 0;
@@ -65,6 +92,7 @@ var changeTopic = function(topicName) {
 	createPages(articles);
 	pagination(1);
 	links.hide();
+	addForm.hide();
 	info.show();
 	infoLeft.html(Mustache.render(template, data));
 };
@@ -126,6 +154,10 @@ var search = function(kind) {
 		if($("#startDateSearch").val()=='' & $("#endDateSearch").val()==''){
 			return;
 		}
+		if(!(dateValidation($("#startDateSearch").val()) & dateValidation($("#endDateSearch").val()))){
+			alert("wrong date format");
+			return;
+		}
 		start = new Date($("#startDateSearch").val());
 		end = new Date($("#endDateSearch").val());
 		
@@ -137,7 +169,7 @@ var search = function(kind) {
 		array = [];
 		for (var index in allArticles) {
 			article = allArticles[index];
-			if (article.date >= start & article.date <= end) {
+			if (new Date(article.date) >= start & new Date(article.date) <= end) {
 				array.push(article);
 			}
 		}
@@ -152,6 +184,7 @@ var search = function(kind) {
 var photoGallery = function() {
 	data.articles = allArticles;
 	info.hide();
+	addForm.hide();
 	links.show();
 	links.html(Mustache.render(imgTemplate, data));
 };
@@ -161,11 +194,4 @@ var data = {
 	articles: articles,
 	pages: []
 };
-
-//init
-/*data.articles = [allArticles[0], allArticles[1]];
-createPages(articles);
-infoLeft.html(Mustache.render(template, data));
-infoPages.html(Mustache.render(pagesTempl, data));
-infoRight.html(Mustache.render(popularTemplate, data));*/
 

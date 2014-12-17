@@ -81,6 +81,12 @@ img {
 	margin: 0 auto;
 }
 
+.addForm {
+	display: none;
+	width:1000px;
+	margin: 0 auto;
+}
+
 .info-left{
 	width: 80%;
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
-
 	<head>
+		<title>Blog</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link href="css/datepicker.css" rel="stylesheet">
@@ -55,21 +55,8 @@
 						<li>
 							<a href="#" onclick="photoGallery()">Photo Gallery</a>
 						</li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Settings <span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-								<li class="dropdown-submenu">
-									<a tabindex="-1" href="#">Style</a>
-									<ul class="dropdown-menu">
-										<li>
-											<a tabindex="-1" href="#">Dark</a>
-										</li>
-										<li>
-											<a tabindex="-1" href="#">Light</a>
-										</li>
-									</ul>
-								</li>
-							</ul>
+						<li>
+							<a href="#" onclick="addArticle()">Add Article</a>
 						</li>
 					</ul>
 					<div class = "navbar-form navbar-right" role="rearch">
@@ -107,7 +94,7 @@
 					<p class="text-justify">
 						{{text}}
 					</p>
-					<small>{{author}} {{stringDate}}</small>
+					<small>{{author}} {{date}}</small>
 				{{/articles}}
 				</div>
 				<nav class="pages text-center">
@@ -134,6 +121,45 @@
 			{{#articles}}
 			<a href={{img}} data-gallery> <img class="smallImg" src={{img}}> </a>
 			{{/articles}}
+		</div>
+		<div class="addForm">
+			<form role="form" name="addArticleForm" method="post" action="/addArticle" onsubmit="return validate()">
+				<div class="form-group">
+					<label for="formTitle">Title</label>
+					<input type="text" class="form-control" id="formTitle" name="formTitle" placeholder="Enter title here" required>
+				</div>
+				<div class="form-group">
+					<label for="formImg">Image link</label>
+					<input type="text" class="form-control" id="formImg" name="formImg" placeholder="Example: https://content.onliner.by/news/2014/12/default/9b95975e396be30db6135d6040c93e8a.jpg" required>
+				</div>
+				<div class="form-group">
+					<label for="formAuthor">Author</label>
+					<input type="text" class="form-control" id="formAuthor" name="formAuthor" placeholder="Enter you name here" required>
+				</div>
+				<div class="form-group"> 
+					<label for="formTopic">Topic</label>
+					<select class="form-control" id="formTopic" name="formTopic" required>
+						<option>Tech</option>
+						<option>Sport</option>
+						<option>Society</option>
+						<option>Movies</option>
+						<option>Music</option>
+						<option>Business</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="formDate">Date</label>
+					<input type="text" class="form-control" id="formDate" name="formDate" placeholder="month/day/year" required>
+				</div>
+				<div class="form-group">
+					<label for="formText">Text</label>
+					<textarea class="form-control" rows="10" id="formText" name="formText" placeholder="Your article text print here" required></textarea>
+				</div>
+				<button type="submit" class="btn btn-default">
+					Submit
+				</button>
+			</form>
+			<br>
 		</div>
 		<div id="blueimp-gallery" class="blueimp-gallery" style="display: none;">
 			<!-- The container for the modal slides -->
