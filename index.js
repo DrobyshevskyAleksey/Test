@@ -34,7 +34,7 @@ app.post('/addArticle', function(req, res) {
 		data = {
 			"allArticles" : rows.reverse()
 		};
-		fs.writeFileSync("JSON/example.json", JSON.stringify(data));
+		fs.writeFileSync("JSON/articles.json", JSON.stringify(data));
 		res.redirect('/');
 	});
 	connection.end();

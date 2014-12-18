@@ -1,4 +1,3 @@
-// Code goes here...
 $('.dropdown-toggle').dropdown();
 $('.input-daterange').datepicker({
     format: "mm/dd/yyyy",
@@ -12,31 +11,22 @@ $('#formDate').datepicker({
     autoclose: true,
     keyboardNavigation: false,
 });
-var allArticles = [];
 $(function() {
-	$.getJSON("JSON/example.json", function(data) {
-		for (var index in data.allArticles) {
+	$.getJSON("JSON/articles.json", function(objects) {
+		for (var i = 0; i<objects.allArticles.length; i++){
 			allArticles.push({
-				title : data.allArticles[index].title,
-				img : data.allArticles[index].img,
-				author : data.allArticles[index].author,
-				topic : data.allArticles[index].topic,
-				date : data.allArticles[index].date,
-				text : data.allArticles[index].text
+				title : objects.allArticles[i].title,
+				img : objects.allArticles[i].img,
+				author : objects.allArticles[i].author,
+				topic : objects.allArticles[i].topic,
+				date : objects.allArticles[i].date,
+				text : objects.allArticles[i].text
 			});
 		}
 		data.articles = [allArticles[0], allArticles[1]];
-		data.allArticles = [allArticles[5], allArticles[7], allArticles[1], allArticles[0], allArticles[3]];
-		var pages = [];
-		for (var i = 1; i < (allArticles.length / 2) + 1; i++) {
-			pages.push({
-				page : i
-			});
-		}
-		data.pages = pages;
-		infoPages.html(Mustache.render(pagesTempl, data));
+		setMostPopular();
+		createPages(allArticles);
 		infoLeft.html(Mustache.render(template, data));
-		infoPages.html(Mustache.render(pagesTempl, data));
 		infoRight.html(Mustache.render(popularTemplate, data));
 	});
 }); 
@@ -51,7 +41,20 @@ var pagesTempl = infoPages.html();
 var popularTemplate = infoRight.html();
 var imgTemplate = links.html();
 var topic = 'All';
+var allArticles = [];
 var articles = allArticles;
+var data = {
+	allArticles: [],
+	articles: articles,
+	pages: []
+};
+
+var setMostPopular = function(){
+	data.allArticles = [];
+	for(var i=1; i<=5; i++){
+		data.allArticles.push(allArticles[allArticles.length-i]);
+	}
+};
 
 var addArticle = function(){
 	info.hide();
@@ -71,7 +74,6 @@ var validate = function(){
 		alert("wrong date format");
 		return false;
 	}
-	
 };
 
 var createPages = function(arr){
@@ -99,8 +101,8 @@ var changeTopic = function(topicName) {
 
 var showOne = function(title){
 	array = [];
-	for (var index in allArticles) {
-		article = allArticles[index];
+	for (var i=0; i<allArticles.length; i++) {
+		article = allArticles[i];
 		if(article.title==title){
 			array.push(article);
 			break;
@@ -116,8 +118,8 @@ var changeData = function() {
 	if (topic === 'All') {
 		array = allArticles;
 	}
-	for (var index in allArticles) {
-		article = allArticles[index];
+	for (var i=0; i<allArticles.length; i++) {
+		article = allArticles[i];
 		if (topic === article.topic) {
 			array.push(article);
 		}
@@ -142,8 +144,8 @@ var search = function(kind) {
 		if(regexp==''){
 			return;
 		}
-		for (var index in allArticles) {
-			article = allArticles[index];
+		for (var i=0; i<allArticles.length; i++) {
+			article = allArticles[i];
 			if (article.title.toLowerCase().search(regexp) + 1) {
 				array.push(article);
 			}
@@ -167,8 +169,8 @@ var search = function(kind) {
 		}
 		links.hide();
 		array = [];
-		for (var index in allArticles) {
-			article = allArticles[index];
+		for (var i=0; i<allArticles.length; i++) {
+			article = allArticles[i];
 			if (new Date(article.date) >= start & new Date(article.date) <= end) {
 				array.push(article);
 			}
@@ -187,11 +189,5 @@ var photoGallery = function() {
 	addForm.hide();
 	links.show();
 	links.html(Mustache.render(imgTemplate, data));
-};
-
-var data = {
-	allArticles: [],
-	articles: articles,
-	pages: []
 };
 
