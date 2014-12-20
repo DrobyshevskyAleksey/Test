@@ -11,25 +11,7 @@ $('#formDate').datepicker({
     autoclose: true,
     keyboardNavigation: false,
 });
-$(function() {
-	$.getJSON("JSON/articles.json", function(objects) {
-		for (var i = 0; i<objects.allArticles.length; i++){
-			allArticles.push({
-				title : objects.allArticles[i].title,
-				img : objects.allArticles[i].img,
-				author : objects.allArticles[i].author,
-				topic : objects.allArticles[i].topic,
-				date : objects.allArticles[i].date,
-				text : objects.allArticles[i].text
-			});
-		}
-		data.articles = [allArticles[0], allArticles[1]];
-		setMostPopular();
-		createPages(allArticles);
-		infoLeft.html(Mustache.render(template, data));
-		infoRight.html(Mustache.render(popularTemplate, data));
-	});
-}); 
+
 var info = $("#info");
 var infoLeft = $(".articles");
 var infoPages = $(".pages");
@@ -42,12 +24,35 @@ var popularTemplate = infoRight.html();
 var imgTemplate = links.html();
 var topic = 'All';
 var allArticles = [];
-var articles = allArticles;
+var articles = [];
 var data = {
 	allArticles: [],
 	articles: articles,
 	pages: []
 };
+
+var init = function() {
+	$.getJSON("/articles", function(objects) {
+		allArticles = [];
+		for (var i = 0; i<objects.allArticles.length; i++){
+			allArticles.push({
+				title : objects.allArticles[i].title,
+				img : objects.allArticles[i].img,
+				author : objects.allArticles[i].author,
+				topic : objects.allArticles[i].topic,
+				date : objects.allArticles[i].date,
+				text : objects.allArticles[i].text
+			});
+		}
+		articles = allArticles;
+		data.articles = [allArticles[0], allArticles[1]];
+		setMostPopular();
+		createPages(allArticles);
+		infoLeft.html(Mustache.render(template, data));
+		infoRight.html(Mustache.render(popularTemplate, data));
+	});
+};
+init();
 
 var setMostPopular = function(){
 	data.allArticles = [];
@@ -57,6 +62,7 @@ var setMostPopular = function(){
 };
 
 var addArticle = function(){
+	resetForm();
 	info.hide();
 	links.hide();
 	addForm.show();
@@ -67,13 +73,50 @@ var dateValidation = function(date){
 	return regexp.test(date);
 };
 
-var validate = function(){
-	if(dateValidation(document.forms.addArticleForm.formDate.value)){
-		return true;
-	} else {
-		alert("wrong date format");
+
+var validateForm = function() {
+	if ($('#formTitle').val() == '' | $('#formImg').val() == '' | $('#formAuthor').val() == '' | $('#formTopic').val() == '' | $('#formDate').val() == '' | $('#formText').val() == '') {
+		alert('Please, fill all necessary fields!');
 		return false;
 	}
+	if (!dateValidation($('#formDate').val())) {
+		alert('Wrong date format!');
+		return false;
+	}
+	return true;
+}; 
+
+var resetForm = function(){
+	$('#formTitle').val('');
+	$('#formImg').val('');
+	$('#formAuthor').val('');
+	$('#formTopic').val('Tech');
+	$('#formDate').val('');
+	$('#formText').val('');
+};
+
+var sendArticle = function(){
+	if(!validateForm()){
+		return;
+	};
+	body = {
+		title: $('#formTitle').val(),
+		img: $('#formImg').val(),
+		author: $('#formAuthor').val(),
+		topic: $('#formTopic').val(),
+		date: $('#formDate').val(),
+		text: $('#formText').val(),
+	};
+	$.ajax('/addArticle', {
+		contentType: 'application/json',
+        type: 'post',
+        data: JSON.stringify(body)
+	}).always(function(){
+		alert('Article successfully added!');
+		addForm.hide();
+		info.show();
+		init();
+	});
 };
 
 var createPages = function(arr){
@@ -190,4 +233,3 @@ var photoGallery = function() {
 	links.show();
 	links.html(Mustache.render(imgTemplate, data));
 };
-
