@@ -34,5 +34,5 @@ var server = app.listen(3000, function() {
 process.on('SIGINT', function() {
 	db.close();
 	console.log('Finifhed...');
-	process.close();
+	process.exit();
 });
